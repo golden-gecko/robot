@@ -14,6 +14,9 @@ sudo systemctl disable ${SERVICES}
 sudo systemctl stop ${SERVICES}
 sudo systemctl mask ${SERVICES}
 
+# install bluetooth
+sudo apt-get -y install bluetooth bluez
+
 # install git
 sudo apt-get -y install git
 

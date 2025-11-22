@@ -18,13 +18,14 @@ Robot based on Raspberry Pi Zero.
 
 ### Raspberry Pi Zero
 
-Install OS.
-
-Enable UART in `/boot/config.txt` for Wi-Fi configuration:
+Install Raspbian and configure `/boot/config.txt` file:
 
 ```
-# Enable UART
+dtparam=i2c_arm=on
+dtparam=spi=off
 enable_uart=1
+gpu_mem=128
+start_x=1
 ```
 
 Run `setup.sh`.

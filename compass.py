@@ -18,7 +18,7 @@ class Compass:
             yield self.get()
 
     def get(self):
-        log.call(self)
+        # log.call(self)
 
         hmc5883l = i2clibraries.i2c_hmc5883l.i2c_hmc5883l(self.port)
         hmc5883l.setContinuousMode()
