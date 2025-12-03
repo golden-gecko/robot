@@ -27,7 +27,7 @@ class Lidar:
             }
 
     def get(self):
-        log.call(self)
+        # log.call(self)
 
         distance = 0
 

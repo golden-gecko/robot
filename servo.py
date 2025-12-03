@@ -44,7 +44,7 @@ class Servo:
                 }
 
     def rotate(self, pulse):
-        log.call(self, pulse)
+        # log.call(self, pulse)
 
         if pulse < self.min:
             pulse = self.min

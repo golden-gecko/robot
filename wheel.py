@@ -53,6 +53,6 @@ class Wheel:
         RPi.GPIO.output(self.pwm_pin, RPi.GPIO.LOW)
 
     def encoder_callback(self, pin):
-        log.call(self, pin)
+        # log.call(self, pin)
 
         self.rotations = self.rotations + self.direction

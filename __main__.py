@@ -1,11 +1,10 @@
 import logging
-import RPi.GPIO as GPIO
+import RPi.GPIO
 import signal
 import time
+import threading
 import tornado.ioloop
 import tornado.web
-
-from tornado.netutil import bind_sockets
 
 import db
 import log
@@ -18,32 +17,32 @@ robot_istance = None
 
 class RobotForward(tornado.web.RequestHandler):
     def get(self):
-        robot.forward()
+        robot_istance.forward()
 
 
 class RobotBackward(tornado.web.RequestHandler):
     def get(self):
-        robot.backward()
+        robot_istance.backward()
 
 
 class RobotLeft(tornado.web.RequestHandler):
     def get(self):
-        robot.left()
+        robot_istance.left()
 
 
 class RobotRight(tornado.web.RequestHandler):
     def get(self):
-        robot.right()
+        robot_istance.right()
 
 
 class RobotStop(tornado.web.RequestHandler):
     def get(self):
-        robot.stop()
+        robot_istance.stop()
 
 
 class RobotReset(tornado.web.RequestHandler):
     def get(self):
-        robot.reset()
+        robot_istance.reset()
 
 
 def make_app():
@@ -67,7 +66,7 @@ def setup_signals():
 
 
 def setup_board():
-    GPIO.setmode(GPIO.BCM)
+    RPi.GPIO.setmode(RPi.GPIO.BCM)
 
 
 def run_http_server():
@@ -78,7 +77,23 @@ def run_http_server():
     server_istance = tornado.httpserver.HTTPServer(make_app())
     server_istance.listen(8000)
 
-    # tornado.ioloop.IOLoop.current().start()
+    tornado.ioloop.IOLoop.current().start()
+
+
+def robot_worker():
+    global robot_istance
+
+    robot_istance = robot.Robot()
+    robot_update = robot_istance.update()
+
+    while True:
+        robot_values = next(robot_update)
+
+        logging.info(robot_values)
+
+        # db.db.telemetry.insert(robot_values)
+
+        time.sleep(0.5)
 
 
 def run_robot():
@@ -86,17 +101,8 @@ def run_robot():
 
     logging.info("Starting robot")
 
-    robot_istance = robot.Robot()
-    robot_update = robot_istance.update()
-
-    while True:
-        values = next(robot_update)
-
-        logging.info(values)
-
-        # db.db.telemetry.insert(values)
-
-        time.sleep(0.5)
+    t = threading.Thread(target=robot_worker)
+    t.start()
 
 
 if __name__ == "__main__":
@@ -104,7 +110,7 @@ if __name__ == "__main__":
         setup_signals()
         setup_board()
 
-        run_http_server()
         run_robot()
+        run_http_server()
     finally:
         GPIO.cleanup()
