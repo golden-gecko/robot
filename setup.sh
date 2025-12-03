@@ -20,9 +20,6 @@ sudo apt-get -y install bluetooth bluez
 # install git
 sudo apt-get -y install git
 
-git config --global user.name "Wojciech Holisz"
-git config --global user.email "wojciech.holisz@gmail.com"
-
 # install gpio
 sudo apt-get -y install i2c-tools wiringpi
 
