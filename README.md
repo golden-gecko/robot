@@ -2,6 +2,8 @@
 
 Robot based on Raspberry Pi Zero.
 
+![Alt text](/docs/robot-1.jpg)
+
 ## Configuration
 
 ### GPIO
